@@ -1,6 +1,6 @@
 import javax.swing.*;
 
-public class HelloWorld {
+public class CreateAndShowGUI_Basic {
 
     private static void createAndShowGUI() {
         JFrame frame = new JFrame("Hello World Swing");

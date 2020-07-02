@@ -1,20 +1,17 @@
 import javax.swing.*;
-import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.metal.DefaultMetalTheme;
 import javax.swing.plaf.metal.MetalLookAndFeel;
-import javax.swing.plaf.metal.MetalTheme;
 import javax.swing.plaf.metal.OceanTheme;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.lang.reflect.Method;
 
 public class LookAndFeelPractice implements ActionListener {
     private int counter = 0;
     private JLabel label;
     private static final String LOOKANDFEEL = "Metal";
-    private static final String THEME = "Other";
+    private static final String THEME = "other";
 
 
     public Component createComponent() {
@@ -55,7 +52,7 @@ public class LookAndFeelPractice implements ActionListener {
             // set Lookandfeel
             try {
                 UIManager.setLookAndFeel(lookandfeel);
-                // "Metal" lookandfeel has default themes and one custom theme - TestTheme.java
+                // "Metal" lookandfeel has default themes and one custom theme - TestThemeForLookAndFeelPractice.java
                 if(LOOKANDFEEL.equals("Metal")) {
                     if(THEME.equals("DefaultMetal")) {
                         MetalLookAndFeel.setCurrentTheme(new DefaultMetalTheme());
@@ -63,7 +60,7 @@ public class LookAndFeelPractice implements ActionListener {
                     } else if(THEME.equals("Ocean")) {
                         MetalLookAndFeel.setCurrentTheme(new OceanTheme());
                     } else {
-                        MetalLookAndFeel.setCurrentTheme(new TestTheme());
+                        MetalLookAndFeel.setCurrentTheme(new TestThemeForLookAndFeelPractice());
                     }
 
                     // must define setLookandfeel to show the theme
