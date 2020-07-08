@@ -166,7 +166,7 @@ public class TextComponent_AllTypes extends JPanel implements ActionListener {
                                 "uses a StyledEditorKit and StyledDocument, and provides " +
                                 "cover methods for interacting with those objects."
                 };
-
+        // name each style - style doesn't have to be named. Style is interface, SimpleAttributeSet is the class from MutableAttributeSet
         String[] initStyles = // 10 styles in the array -- total 7 types of styles
                 { "regular", "italic", "bold", "small", "large",
                         "regular", "button", "regular", "icon",
@@ -191,8 +191,11 @@ public class TextComponent_AllTypes extends JPanel implements ActionListener {
         return textPane;
     }
     //  match the style name to its style definition
+    // compare with TextPane_Menu_CaretListener_DocumentListener.java initTextPane().
+    // this use  attributesets array with each has itw own nameKey
     protected void addStylesToDocument(StyledDocument doc) {
         //Initialize some styles.
+        // highlight the upmost parent style is the default_style
         Style def = StyleContext.getDefaultStyleContext().
                 getStyle(StyleContext.DEFAULT_STYLE);
        // 1. "regular"
