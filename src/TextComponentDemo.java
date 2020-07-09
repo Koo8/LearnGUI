@@ -171,22 +171,22 @@ public class TextComponentDemo extends JFrame {
 
     //Add a couple of emacs key bindings for navigation.
     protected void addBindings() {
-        InputMap inputMap = textPane.getInputMap();
+        InputMap inputMap = textPane.getInputMap();  // method from JComponent
 
         //Ctrl-b to go backward one character
-        KeyStroke key = KeyStroke.getKeyStroke(KeyEvent.VK_B, Event.CTRL_MASK);
+        KeyStroke key = KeyStroke.getKeyStroke(KeyEvent.VK_B, KeyEvent.CTRL_DOWN_MASK);
         inputMap.put(key, DefaultEditorKit.backwardAction);
 
         //Ctrl-f to go forward one character
-        key = KeyStroke.getKeyStroke(KeyEvent.VK_F, Event.CTRL_MASK);
+        key = KeyStroke.getKeyStroke(KeyEvent.VK_F, KeyEvent.CTRL_DOWN_MASK);
         inputMap.put(key, DefaultEditorKit.forwardAction);
 
         //Ctrl-p to go up one line
-        key = KeyStroke.getKeyStroke(KeyEvent.VK_P, Event.CTRL_MASK);
+        key = KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_DOWN_MASK);
         inputMap.put(key, DefaultEditorKit.upAction);
 
         //Ctrl-n to go down one line
-        key = KeyStroke.getKeyStroke(KeyEvent.VK_N, Event.CTRL_MASK);
+        key = KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK);
         inputMap.put(key, DefaultEditorKit.downAction);
     }
 
@@ -342,8 +342,7 @@ public class TextComponentDemo extends JFrame {
             if (undo.canUndo()) {
                 setEnabled(true);
                 putValue(Action.NAME, undo.getUndoPresentationName());
-                // todo test
-                System.out.println("getUndoPresentationname " + undo.getUndoPresentationName());
+
             } else {
                 setEnabled(false);
                 putValue(Action.NAME, "Undo");

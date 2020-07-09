@@ -1,10 +1,13 @@
 import javax.swing.*;
-import javax.swing.event.CaretEvent;
-import javax.swing.event.CaretListener;
+import javax.swing.event.*;
 import javax.swing.text.*;
+import javax.swing.undo.UndoManager;
+import javax.swing.undo.UndoableEdit;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
+import java.security.Key;
 import java.util.HashMap;
 
 public class TextPane_Menu_CaretListener_DocumentListener extends JFrame {
@@ -15,16 +18,17 @@ public class TextPane_Menu_CaretListener_DocumentListener extends JFrame {
     // menu Actions
     private UndoAction undo;
     private RedoAction redo;
+    private UndoManager undoManager = new UndoManager();
 
 
-    TextPane_Menu_CaretListener_DocumentListener() {
+    private TextPane_Menu_CaretListener_DocumentListener() {
         super("TextPaneWithMenuForListeners");
 
         // this JFrame has 3 parts, textpane, textarea and JLabel. It also has a menubar
         ////// Firstly --- add JTextPane - get its model - styledDocument, set documentFilter
 
         textPane = new JTextPane();
-        textPane.setMargin(new Insets(5,5,5,5));
+        textPane.setMargin(new Insets(5, 5, 5, 5));
         doc = (AbstractDocument) textPane.getStyledDocument();  // get model
         // AbstractDocument use documentFilter if available for text related doc mutation such as insertString,replace or remove
         doc.setDocumentFilter(new DocumentSizeFilter(300)); // set filter
@@ -35,11 +39,22 @@ public class TextPane_Menu_CaretListener_DocumentListener extends JFrame {
         // put initial text into text pane
         initTextPane();
 
+        // add listeners to document - the model
+        ///** add undoableEditListener to listen to the undo and redo action through undoManager
+        doc.addDocumentListener(new ThisDocumentListener());
+        doc.addUndoableEditListener(new ThisUnDoableEditListener());
+
+
         ////// Secondly --- add JTextArea
-        logArea = new JTextArea(5, 30);
+        logArea = new JTextArea("No input yet");
         logArea.setEditable(false);
-        JScrollPane paneBottom = new JScrollPane();
-        paneBottom.setPreferredSize(new Dimension(300,100));
+        //logArea.setOpaque(true);
+        logArea.setBackground(Color.RED);
+        logArea.setForeground(Color.WHITE);
+        logArea.setFont(new Font("serif", Font.BOLD, 20));
+
+        JScrollPane paneBottom = new JScrollPane(logArea);
+        paneBottom.setPreferredSize(new Dimension(300, 100));
         // add to splitPane
         JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, paneTop, paneBottom);
         splitPane.setOneTouchExpandable(true);
@@ -59,6 +74,7 @@ public class TextPane_Menu_CaretListener_DocumentListener extends JFrame {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
+                        // **to display caret info in the JLabel
                         // when no selection is conducted
                         if (dot == mark) {
                             //Converts the given location in the model to a place in
@@ -77,6 +93,8 @@ public class TextPane_Menu_CaretListener_DocumentListener extends JFrame {
                         } else {
                             labelForCaretPosition.setText("selection from: " + mark + " to " + dot + "\n");
                         }
+                         // **to catch the change event from textpane
+                        textPane.getSelectedText();
                     }
                 });
             }
@@ -102,9 +120,9 @@ public class TextPane_Menu_CaretListener_DocumentListener extends JFrame {
         editMenu.add(redo);
         editMenu.addSeparator();
         // add 4 actions from default editor menu  -- cut, copy, past and selectAll
-            // highlight: DefaultEditorKit.selectAllAction is a "String" name for the so called acion.
-            // create a "getActionByItsName" method to return Action. The menu needs to add an Acion to function
-            // for those nested class Actions, the new keyword can create them directly without binding to any JtextComponent
+        // highlight: DefaultEditorKit.selectAllAction is a "String" name for the so called acion.
+        // create a "getActionByItsName" method to return Action. The menu needs to add an Acion to function
+        // for those nested class Actions, the new keyword can create them directly without binding to any JtextComponent
         editMenu.add(new DefaultEditorKit.CutAction());
         editMenu.add(new DefaultEditorKit.CopyAction());
         editMenu.add(new DefaultEditorKit.PasteAction());
@@ -149,13 +167,20 @@ public class TextPane_Menu_CaretListener_DocumentListener extends JFrame {
                 Color.black));
 
         // add keybindings for textPane
+        addKeyBindingsToTextPane();
+    }
 
-        // set textPane caret position
-
-        // add listeners
-        
-
-
+    private void addKeyBindingsToTextPane() {
+        // get to inputMap of JComponent, use .put() to bind the keyStroke with ActionMap
+        InputMap inputMap = textPane.getInputMap();
+        // pair ctrl+b to backward action
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_B,KeyEvent.CTRL_DOWN_MASK),DefaultEditorKit.backwardAction);
+        // pair ctrl+f to forward action
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F,KeyEvent.CTRL_DOWN_MASK), DefaultEditorKit.forwardAction);
+        // pair ctrl+p to up action
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_DOWN_MASK), DefaultEditorKit.upAction);
+        // pair ctrl+n to down action
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK), DefaultEditorKit.downAction);
     }
 
     // compare with TextComponent_AllTypes.java line 194 addStylesTODocument()
@@ -208,11 +233,63 @@ public class TextPane_Menu_CaretListener_DocumentListener extends JFrame {
         HashMap<String, Action> actionArray = new HashMap<>();
         DefaultEditorKit kit = new DefaultEditorKit();
         Action[] actions = kit.getActions();
-        for (int i = 0; i <actions.length ; i++) {
-             actionArray.put((String) actions[i].getValue(Action.NAME),actions[i]);
+        for (int i = 0; i < actions.length; i++) {
+            actionArray.put((String) actions[i].getValue(Action.NAME), actions[i]);
         }
         return actionArray.get(actionName);
+    }
 
+
+    // Actions Class
+    class UndoAction extends AbstractAction {
+        // constractor
+        public UndoAction() {
+            super("Undo"); // create an action with the set Name
+            setEnabled(false); // initially false state
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            undoManager.undo();
+            updateUndoActionState();
+            redo.updateRedoActionState();
+        }
+
+        private void updateUndoActionState() {
+            if (undoManager.canUndo()) {
+                setEnabled(true);
+                putValue(Action.NAME, undoManager.getUndoPresentationName());
+            } else {
+                setEnabled(false);
+                putValue(Action.NAME, "undo");
+            }
+
+        }
+    }
+
+    class RedoAction extends AbstractAction {
+        //constructor
+        public RedoAction() {
+            super("redo");
+            setEnabled(false);
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            undoManager.redo();
+            updateRedoActionState();
+            undo.updateUndoActionState();
+        }
+
+        public void updateRedoActionState() {
+            if (undoManager.canRedo()) {
+                setEnabled(true);
+                putValue(Action.NAME, undoManager.getRedoPresentationName());
+            } else {
+                setEnabled(false);
+                putValue(Action.NAME, "redo");
+            }
+        }
     }
 
     public static void CreateAndShowGUI() {
@@ -232,22 +309,48 @@ public class TextPane_Menu_CaretListener_DocumentListener extends JFrame {
         });
     }
 
-    // Actions Class
-    // todo???
-    class UndoAction extends AbstractAction {
+    private class ThisDocumentListener implements DocumentListener {
+        // all methods display the same result
+        @Override
+        public void insertUpdate(DocumentEvent e) {
+            System.out.println("insertUpdated");
+            displayDocUpdates(e);
+        }
 
         @Override
-        public void actionPerformed(ActionEvent e) {
+        public void removeUpdate(DocumentEvent e) {
+            System.out.println("removeUpdated");
+            displayDocUpdates(e);
+        }
 
+        @Override
+        public void changedUpdate(DocumentEvent e) {
+            System.out.println("changeUpdated");
+            displayDocUpdates(e);
+        }
+
+        private void displayDocUpdates(DocumentEvent e) {
+            Document document = e.getDocument();
+            int length = e.getLength();
+            System.out.println("document " + document + " has changed " + length);
+
+            try {
+                logArea.setText((document.getText(textPane.getSelectionStart(), length)) + " " +e.getType());
+            } catch (BadLocationException ex) {
+                System.out.println("Bad Location inside documentEventListener");
+                ex.printStackTrace();
+            }
         }
     }
 
-    // todo ???
-    class RedoAction extends AbstractAction {
-
+    private class ThisUnDoableEditListener implements UndoableEditListener {
         @Override
-        public void actionPerformed(ActionEvent e) {
-
+        public void undoableEditHappened(UndoableEditEvent e) {
+            UndoableEdit edit = e.getEdit();
+            undoManager.addEdit(edit);
+            // check if canUndo and canRedo to set setEditable accordingly
+            undo.updateUndoActionState();
+            redo.updateRedoActionState();
         }
     }
 }
