@@ -31,6 +31,8 @@ public class TextPane_Menu_CaretListener_DocumentListener extends JFrame {
         textPane.setMargin(new Insets(5, 5, 5, 5));
         doc = (AbstractDocument) textPane.getStyledDocument();  // get model
         // AbstractDocument use documentFilter if available for text related doc mutation such as insertString,replace or remove
+
+        // todo ???
         doc.setDocumentFilter(new DocumentSizeFilter(300)); // set filter
         // put textPane inside a ScrollPane
         JScrollPane paneTop = new JScrollPane(textPane);
