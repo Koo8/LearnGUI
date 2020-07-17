@@ -1,16 +1,21 @@
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.colorchooser.AbstractColorChooserPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.plaf.basic.BasicOptionPaneUI;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class ColorChooser extends JPanel implements ChangeListener {
+public class ColorChooser extends JPanel implements ChangeListener, ActionListener {
 
     private JColorChooser cc;
     private JLabel banner;
     //constructor
     private ColorChooser() {
         super(new BorderLayout());
-        // A JPanel holding the banner
+        // part-1 A JPanel holding the banner
         JPanel bannerPanel = new JPanel(new BorderLayout());
         bannerPanel.setBorder(BorderFactory.createTitledBorder("Banner"));
         // paint banner
@@ -30,15 +35,32 @@ public class ColorChooser extends JPanel implements ChangeListener {
         // add banner to bannerPanel
         bannerPanel.add(banner, BorderLayout.CENTER);
 
-        //
-        cc= new JColorChooser(banner.getForeground());
-        cc.setBorder(BorderFactory.createTitledBorder("Pick a Color"));
+        // Part -2 create buttonPanel
+        JPanel buttonPanel = new JPanel(new BorderLayout());
+        buttonPanel.setBorder(BorderFactory.createTitledBorder("Click to change background color"));
+        JButton button = new JButton("Show Color Chooser...");
+        button.addActionListener(this);
+        buttonPanel.add(button,BorderLayout.CENTER);
+
+        // Part - 3 add colorChooser with its default chooserPanel  and  preview Panel
+        cc= new JColorChooser(banner.getForeground());   // no parameter make the initial color to be white
+        cc.setBorder(BorderFactory.createTitledBorder("Choose a Front Color"));
         // add changeListener to cc
         cc.getSelectionModel().addChangeListener(this);
 
+        // remove the colorchooser's preview panel
+        cc.setPreviewPanel(new JPanel());
+        // override chooserPane with your own
+        // for adding a new chooserPanel to a JColorChooser, subclass the AbstractColorChooserPanel
+        AbstractColorChooserPanel myChooserPanel[] = {new AbstractColorChooserPanelSubClass()}; // oooo needs to create a new class for ChooserPanel
+        cc.setChooserPanels(myChooserPanel);
+        cc.setColor(banner.getForeground());
+
         // add two parts to the main panel
-        add(bannerPanel, BorderLayout.CENTER);
+        add(bannerPanel, BorderLayout.PAGE_START);
+        add(buttonPanel, BorderLayout.CENTER);
         add(cc,BorderLayout.PAGE_END);
+        setPreferredSize(new Dimension(600, 400));
 
     }
 
@@ -50,7 +72,7 @@ public class ColorChooser extends JPanel implements ChangeListener {
     }
     //CAS == create and Show
     private static void CASGUI() {
-        JFrame frame = new JFrame();
+        JFrame frame = new JFrame("Color Chooser Customed Panel");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // instantiate this class
@@ -67,5 +89,14 @@ public class ColorChooser extends JPanel implements ChangeListener {
                 CASGUI();
             }
         });
+    }
+
+    // when button is clicked
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        Color color = JColorChooser.showDialog(this,"Pick a Color", banner.getBackground());
+        if (color != null){
+            banner.setBackground(color);
+        }
     }
 }
