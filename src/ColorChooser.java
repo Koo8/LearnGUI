@@ -39,6 +39,9 @@ public class ColorChooser extends JPanel implements ChangeListener, ActionListen
         JPanel buttonPanel = new JPanel(new BorderLayout());
         buttonPanel.setBorder(BorderFactory.createTitledBorder("Click to change background color"));
         JButton button = new JButton("Show Color Chooser...");
+        button.setBackground(new Color(100,200,200));   // todo: how to remove the lined border around the JButton
+        button.setForeground(Color.WHITE);
+        button.setFont(new Font(allFonts[30],Font.BOLD, 25));
         button.addActionListener(this);
         buttonPanel.add(button,BorderLayout.CENTER);
 
