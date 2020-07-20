@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
  *  * a new color chooser panel into a JColorChooser, subclass
  *  * this class.  This is used by ColorChooser.java
  *  I used JRadioButton in the class, 4 JToggleButton works the same.
+ *  // this class is a helper class for the colorChooser.java
  */
 
 public class AbstractColorChooserPanelSubClass extends AbstractColorChooserPanel implements ActionListener {
