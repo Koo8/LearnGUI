@@ -4,18 +4,18 @@ import javax.swing.*;
 
 /*
  * RadioButtonDemo.java requires these files:
- *   images/Bird.gif
- *   images/Cat.gif
- *   images/Dog.gif
- *   images/Rabbit.gif
+ *   images/bird.gif
+ *   images/cat.gif
+ *   images/dog.gif
+ *   images/rabbit.gif
  *   images/Pig.gif
  */
 public class RadioButtonDemo extends JPanel
         implements ActionListener {
-    static String birdString = "Bird";
-    static String catString = "Cat";
-    static String dogString = "Dog";
-    static String rabbitString = "Rabbit";
+    static String birdString = "bird";
+    static String catString = "cat";
+    static String dogString = "dog";
+    static String rabbitString = "rabbit";
     static String pigString = "Pig";
 
     JLabel picture;

@@ -2,13 +2,9 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-/*
- * ComboBoxDemo.java uses these additional files:
- *   images/Bird.gif
- *   images/Cat.gif
- *   images/Dog.gif
- *   images/Rabbit.gif
- *   images/Pig.gif
+/**
+ * load up photos, I have to rename the file, not sure why Pig.gif works ( which has been downloaded before)
+ * but all other 4 animal photos not recognizable, after I rename them, they are all correct.
  */
 public class ComboBoxDemo extends JPanel
         implements ActionListener {
@@ -17,11 +13,11 @@ public class ComboBoxDemo extends JPanel
     public ComboBoxDemo() {
         super(new BorderLayout());
 
-        String[] petStrings = { "Bird", "Cat", "Dog", "Rabbit", "Pig" };
+        String[] petStrings = { "bird", "cat", "dog", "rabbit", "Pig" };
 
         //Create the combo box, select the item at index 4.
         //Indices start at 0, so 4 specifies the pig.
-        JComboBox petList = new JComboBox(petStrings);
+        JComboBox petList = new JComboBox<String>(petStrings);
         petList.setSelectedIndex(4);
         petList.addActionListener(this);
 
@@ -35,6 +31,7 @@ public class ComboBoxDemo extends JPanel
         //The preferred size is hard-coded to be the width of the
         //widest image and the height of the tallest image + the border.
         //A real program would compute this.
+        //todo: find the highest and widest of all images
         picture.setPreferredSize(new Dimension(177, 122+10));
 
         //Lay out the demo.
