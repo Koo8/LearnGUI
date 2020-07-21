@@ -1,5 +1,6 @@
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -10,6 +11,11 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+/**
+ * DnD for JTable JColorBox, JCheckBox, JTextField, JTextArea JList and JTree
+ * AbstractTableModel vs. DefaultTableModel
+ */
 
 public class DnD_Basic extends JPanel implements ActionListener {
     // Fields
