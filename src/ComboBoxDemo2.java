@@ -1,16 +1,16 @@
-import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.border.*;
-import java.util.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /* ComboBoxDemo2.java requires no other files. */
 public class ComboBoxDemo2 extends JPanel
         implements ActionListener {
     static JFrame frame;
     JLabel result;
-    String currentPattern;
+    String currentPattern = "";
 
     public ComboBoxDemo2() {
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
@@ -26,7 +26,7 @@ public class ComboBoxDemo2 extends JPanel
                 "yyyy.MMMMM.dd GGG hh:mm aaa"
         };
 
-        currentPattern = patternExamples[0];
+       currentPattern = patternExamples[0];
 
         //Set up the UI for selecting a pattern.
         JLabel patternLabel1 = new JLabel("Enter the pattern string or");
@@ -72,6 +72,7 @@ public class ComboBoxDemo2 extends JPanel
     } //constructor
 
     public void actionPerformed(ActionEvent e) {
+        System.out.println("listen...");
         JComboBox cb = (JComboBox)e.getSource();
         String newSelection = (String)cb.getSelectedItem();
         currentPattern = newSelection;
@@ -85,7 +86,7 @@ public class ComboBoxDemo2 extends JPanel
                 new SimpleDateFormat(currentPattern);
         try {
             String dateString = formatter.format(today);
-            result.setForeground(Color.black);
+            result.setForeground(Color.BLUE);
             result.setText(dateString);
         } catch (IllegalArgumentException iae) {
             result.setForeground(Color.red);
