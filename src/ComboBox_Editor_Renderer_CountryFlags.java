@@ -45,9 +45,7 @@ public class ComboBox_Editor_Renderer_CountryFlags extends JFrame implements Act
 
     }
     @Override
-    public void actionPerformed(ActionEvent e) {
-
-    }
+    public void actionPerformed(ActionEvent e) {    }
     private class MyCellRenderer extends JPanel implements ListCellRenderer {
         // the parameter "value" is each listItem
         private JLabel labelItem = new JLabel();
@@ -86,6 +84,7 @@ public class ComboBox_Editor_Renderer_CountryFlags extends JFrame implements Act
                 labelItem.setBackground(Color.BLUE);
                 labelItem.setBorder(BorderFactory.createMatteBorder(2,2,2,2,Color.RED));
                 labelItem.setForeground(Color.YELLOW);
+                labelItem.setFont(list.getFont().deriveFont(Font.ITALIC)); // list - a list object used behind the scenes to display the items.
             }  else {
                 labelItem.setBackground(Color.WHITE);
                 labelItem.setBorder(null);
