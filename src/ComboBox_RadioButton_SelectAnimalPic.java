@@ -59,6 +59,9 @@ public class ComboBox_RadioButton_SelectAnimalPic extends JPanel implements Acti
         comboBox.setActionCommand("combo");
         comboBox.setAlignmentX(LEFT_ALIGNMENT);
         comboBox.addActionListener(this);
+        comboBox.setEditable(false);   // false, so the renderer decide the selected item appearance
+        // in order to style the selected item, must set this true, then use BasicComboBoxEditor to style.
+        // see ComboBox_Editor_Renderer_CountryFlags.java for example
 
 
         // JLabel for pictures - for comboBox
@@ -96,7 +99,7 @@ public class ComboBox_RadioButton_SelectAnimalPic extends JPanel implements Acti
 
         // create comboBox2 for setEditable method
         comboBox2 = new JComboBox(dateFormats);
-        comboBox2.setEditable(true);
+        comboBox2.setEditable(true); // true, so the editor defined the selected appearance
         comboBox2.setActionCommand("c2");
         comboBox2.setSelectedIndex(2);
         comboBox2.addActionListener(this);
