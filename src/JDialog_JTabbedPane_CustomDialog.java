@@ -6,6 +6,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Objects;
 
 public class JDialog_JTabbedPane_CustomDialog extends JPanel {
     private JLabel label;
@@ -15,7 +16,7 @@ public class JDialog_JTabbedPane_CustomDialog extends JPanel {
     private NonModalDialog nonModalDialog;
 
     //Constructor
-    JDialog_JTabbedPane_CustomDialog(JFrame frame) {
+    private JDialog_JTabbedPane_CustomDialog(JFrame frame) {
         super(new BorderLayout());
         this.frame = frame;
         icon = Utility.createImageIcon(this, "images/middle.gif");
@@ -51,23 +52,27 @@ public class JDialog_JTabbedPane_CustomDialog extends JPanel {
         JButton button = new JButton("Show it");
 
         createPanel(parentPanel, btnPanel, "Different Icons in Dialogs", text, buttonGroup, button,2);
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String command = buttonGroup.getSelection().getActionCommand();
-                if (command.equals("0")) {
-                    JOptionPane.showMessageDialog(frame,"This is a plain message dialog.","Plain Dialog",JOptionPane.PLAIN_MESSAGE);
-                } else if (command.equals("1")) {
-                    JOptionPane.showMessageDialog(frame,"This is a information message dialog.","Information Message Dialog",JOptionPane.INFORMATION_MESSAGE);
-                } else if (command.equals("2")) {
-                    JOptionPane.showConfirmDialog(frame,"Is this good for a question?","Question Dialog", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE, null );
-                } else if (command.equals("3")) {
+        button.addActionListener(e -> {
+            String command = buttonGroup.getSelection().getActionCommand();
+            switch (command) {
+                case "0":
+                    JOptionPane.showMessageDialog(frame, "This is a plain message dialog.", "Plain Dialog", JOptionPane.PLAIN_MESSAGE);
+                    break;
+                case "1":
+                    JOptionPane.showMessageDialog(frame, "This is a information message dialog.", "Information Message Dialog", JOptionPane.INFORMATION_MESSAGE);
+                    break;
+                case "2":
+                    JOptionPane.showConfirmDialog(frame, "Is this good for a question?", "Question Dialog", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null);
+                    break;
+                case "3":
                     JOptionPane.showMessageDialog(frame, "This is an Error message", " Error Dialog", JOptionPane.ERROR_MESSAGE, null);
-                } else if (command.equals("4")) {
-                    JOptionPane.showMessageDialog(frame,"This is a Warning dialog" , "Warning Dialog", JOptionPane.WARNING_MESSAGE, null);
-                } else if (command.equals("5")) {
+                    break;
+                case "4":
+                    JOptionPane.showMessageDialog(frame, "This is a Warning dialog", "Warning Dialog", JOptionPane.WARNING_MESSAGE, null);
+                    break;
+                case "5":
                     JOptionPane.showMessageDialog(frame, "Custom Icon dialog", "Custom Icon dialog", JOptionPane.INFORMATION_MESSAGE, icon);
-                }
+                    break;
             }
         });
         return parentPanel;
@@ -88,29 +93,27 @@ public class JDialog_JTabbedPane_CustomDialog extends JPanel {
         JButton button = new JButton("Show it");
 
         createPanel(parentPanel, btnPanel, "More complicated Dialogs", text, buttonGroup, button, 1);
-        button.addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String command = buttonGroup.getSelection().getActionCommand();
-                if (command.equals("0")) {
-                    String[] options = {"blue", "pink", "red", "green"};
-                    Object choose = JOptionPane.showInputDialog(frame,
-                            "Which color do you choose?",
-                            "A pre_defined list to choose from",
-                            JOptionPane.QUESTION_MESSAGE,
-                            icon,
-                            options,  //oo if this is null, check the next command.equals("1"), no predetermined list to display, only user can input whatever
-                            options[2]);
-                    // after JOptionPane pop up the dialog, it also detects which button being clicked or if the "x" of the dialog being clicked ( is this for windowlistener to detect?)
-                    // When the selection is changed, setValue is invoked, which generates a PropertyChangeEvent.
-                    if (choose != null) {
-                        label.setText("I like color " + choose);
-                    } else {   // cancel button return "null"
-                        label.setText("You just cancel the OptionPane");
-                    }
+        button.addActionListener(e -> {
+            String command = buttonGroup.getSelection().getActionCommand();
+            if (command.equals("0")) {
+                String[] options = {"blue", "pink", "red", "green"};
+                Object choose = JOptionPane.showInputDialog(frame,
+                        "Which color do you choose?",
+                        "A pre_defined list to choose from",
+                        JOptionPane.QUESTION_MESSAGE,
+                        icon,
+                        options,  //oo if this is null, check the next command.equals("1"), no predetermined list to display, only user can input whatever
+                        options[2]);
+                // after JOptionPane pop up the dialog, it also detects which button being clicked or if the "x" of the dialog being clicked ( is this for windowlistener to detect?)
+                // When the selection is changed, setValue is invoked, which generates a PropertyChangeEvent.
+                if (choose != null) {
+                    label.setText("I like color " + choose);
+                } else {   // cancel button return "null"
+                    label.setText("You just cancel the OptionPane");
                 }
-                if (command.equals("1")) {
+            }
+            switch (command) {
+                case "1":
                     // compare with the above item
                     // highlight: note, I set the parentComponent to "null" instead of "frame", the dialog pop up in the center of the screen, and a default parentComponent is used
                     String s = (String) JOptionPane.showInputDialog(null, "You can input your own text",
@@ -119,12 +122,15 @@ public class JDialog_JTabbedPane_CustomDialog extends JPanel {
                             null, // when null, an icon from L&F will show
                             null,
                             "type your words");
-                    if (s != null) {
-                        label.setText(s);
-                    } else {
-                        label.setText("you cancel the dialog");
-                    }
-                } else if (command.equals("2")) {
+//                        if (s != null) {
+//                            label.setText(s);
+//                        } else {
+//                            label.setText("you cancel the dialog");
+//                        }
+                    // the above if else block can be replaced with Objects.requireNonNullElse method
+                    label.setText(Objects.requireNonNullElse(s, "You cancel the dialog"));
+                    break;
+                case "2":
                     // create a JOptionPane that won't close by default button clicking, this needs to call your own propertyChangeListener
                     // 3 steps: create a JOptionPane, create a JDialog to setContentPane as JOptionPane, to call propertychangeListener on the pane
                     JOptionPane pane = new JOptionPane("The only way to close this dialog is by clicking the buttons below" +
@@ -143,45 +149,43 @@ public class JDialog_JTabbedPane_CustomDialog extends JPanel {
 
                     /**
                      *  NOW, the JOptionPane not able to auto close the dialog after any button clicked (not action triggered), create your own property change listener for any action command*/
-                    pane.addPropertyChangeListener(new PropertyChangeListener() {
-                        @Override
-                        public void propertyChange(PropertyChangeEvent evt) {
-                            // the following two lines warrants that pane.getValue has to be within the condition of value.equals(value), to avoid "uninitializedValue" runtime error
-                            // This is the same a evt.getNewValue.
+                    pane.addPropertyChangeListener(evt -> {
+                        // the following two lines warrants that pane.getValue has to be within the condition of value.equals(value), to avoid "uninitializedValue" runtime error
+                        // This is the same a evt.getNewValue.
 //                            Object s = pane.getValue();  // uninitializedValue when just open up the dialog , 0,1,2 for 3 buttons, can't hear the "X" of the dialog
 //                            System.out.println(s);
-                            Object value = evt.getPropertyName();
-                            if ("value".equals(value)) {      // all 3 buttons has propertyname as "value"
-                                // evt.getNewValue will distinguish 3 buttons as 0,1,2, however, evt can hear the x sign of dialog, but pane.getValue can hear it, that will trigger some runtime error
-                                int n = (int) evt.getNewValue();
-                                // System.out.println(pane.getValue() + " pane ");  // or use Pane.getValue() for 3 buttons
-                                if (n == 0) {
-                                    label.setText("YES GREAT");
-                                } else if (n == 1) {
-                                    label.setText("NOOOOOOO");
-                                } else if (n == 2) {
-                                    label.setText("Cancelled");
-                                    dialog.dispose();
-                                }
+                        Object value = evt.getPropertyName();
+                        if ("value".equals(value)) {      // all 3 buttons has propertyname as "value"
+                            // evt.getNewValue will distinguish 3 buttons as 0,1,2, however, evt can hear the x sign of dialog, but pane.getValue can hear it, that will trigger some runtime error
+                            int n = (int) evt.getNewValue();
+                            // System.out.println(pane.getValue() + " pane ");  // or use Pane.getValue() for 3 buttons
+                            if (n == 0) {
+                                label.setText("YES GREAT");
+                            } else if (n == 1) {
+                                label.setText("NOOOOOOO");
+                            } else if (n == 2) {
+                                label.setText("Cancelled");
+                                dialog.dispose();
                             }
                         }
                     });
                     // like JFrame, these two lines must be at the end to consume all information above
                     dialog.pack();
                     dialog.setVisible(true);
-                }
+                    break;
                 // use custom dialog
-                else if (command.equals("3")) {
+                case "3":
                     if (validateDialog == null) {
                         validateDialog = new ValidateDialog(frame, label);
                     }
                     validateDialog.setVisible(true);
-                } else if (command.equals("4")) {
+                    break;
+                case "4":
                     if (nonModalDialog == null) {
                         nonModalDialog = new NonModalDialog(frame);
                     }
                     nonModalDialog.setVisible(true);
-                }
+                    break;
             }
         });
         return parentPanel;
@@ -203,16 +207,16 @@ public class JDialog_JTabbedPane_CustomDialog extends JPanel {
         JButton button = new JButton("Show it!");
         createPanel(thePanel, btnPanel, "Simple Dialogs", text, group, button, 1);
 
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String command = group.getSelection().getActionCommand();
-                if (command.equals("0")) {
+        button.addActionListener(e -> {
+            String command = group.getSelection().getActionCommand();
+            switch (command) {
+                case "0":
                     // showMessageDialog returns void, so not be able to assign to anything
                     JOptionPane.showMessageDialog(frame, "This is a message dialog \n" +
                             "it has an icon \n" +
                             "and an OK button");
-                } else if (command.equals("1")) {
+                    break;
+                case "1": {
                     int n = JOptionPane.showConfirmDialog(frame, "Confirmed Dialog, what's your answer?", "Confirmed Dialog", JOptionPane.YES_NO_OPTION);
                     // there are 3 option types -- Yes_Option, no_option and closed_option
                     if (n == JOptionPane.YES_OPTION) {
@@ -222,7 +226,9 @@ public class JDialog_JTabbedPane_CustomDialog extends JPanel {
                     } else if (n == JOptionPane.CLOSED_OPTION) {
                         label.setText("You didn't choose anything for Confirmed dialog");
                     }
-                } else if (command.equals("2")) {
+                    break;
+                }
+                case "2": {
                     String[] answers = {"Yes Please", "No Thanks"};
                     int n = JOptionPane.showOptionDialog(frame,
                             "Option Dialog with Customized Button",
@@ -239,12 +245,15 @@ public class JDialog_JTabbedPane_CustomDialog extends JPanel {
                     } else {
                         label.setText("You forget to choose your answer");
                     }
-                } else if (command.equals("3")) {
+                    break;
+                }
+                case "3": {
                     String[] answers = {"Yes take this", "No forget it", "Cancel my application"};
                     int n = JOptionPane.showOptionDialog(frame, "Can I get your application form? ", "Option Dialog with 3 buttons", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, answers, answers[2]);
                     if (n == JOptionPane.CANCEL_OPTION) {
                         label.setText("You just cancel my question!!!");
                     }
+                    break;
                 }
             }
         });
@@ -310,12 +319,9 @@ public class JDialog_JTabbedPane_CustomDialog extends JPanel {
 
     //Main
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                CASGUI();
-            }
-        });
+      //  SwingUtilities.invokeLater(() -> CASGUI());
+        // lamda is replaced with referrence method
+        SwingUtilities.invokeLater(JDialog_JTabbedPane_CustomDialog::CASGUI);
     }
 
     //// INNER DIALOG ClASS
@@ -327,7 +333,6 @@ public class JDialog_JTabbedPane_CustomDialog extends JPanel {
         final String MAGICWORD = "love";
         JOptionPane pane;
         JLabel label;
-        private String typedText = null;
 
         //Constructor
 
@@ -358,12 +363,7 @@ public class JDialog_JTabbedPane_CustomDialog extends JPanel {
                 }
             });
             pane.addPropertyChangeListener(this);
-            textField.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    pane.setValue("Enter");
-                }
-            });
+            textField.addActionListener(e -> pane.setValue("Enter"));
             // I don't see the difference betwee with and without this.
             // if there are multiple focusable area, this line should be added to indicate which area is the first focus area
 //            addComponentListener(new ComponentAdapter() {
@@ -406,7 +406,7 @@ public class JDialog_JTabbedPane_CustomDialog extends JPanel {
                     label.setText("It's OK. You can go to next option");
                     dispose();
                 }
-            } else return;
+            }
         }
     }
 
