@@ -185,7 +185,7 @@ public class TextPane_Menu_CaretListener_DocumentListener extends JFrame {
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK), DefaultEditorKit.downAction);
     }
 
-    // compare with TextComponent_AllTypes.java line 194 addStylesTODocument()
+    // compare with TextComponent_AllTypes_EditorPane_TextPane.java line 194 addStylesTODocument()
     // attributesets in an array with array[index] as the index key.
     private void initTextPane() {
         // because document.insertString() needs string as one parameter  and attributeSet as another parameter

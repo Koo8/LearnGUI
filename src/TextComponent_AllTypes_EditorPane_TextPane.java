@@ -7,7 +7,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Calendar;
 
-public class TextComponent_AllTypes extends JPanel implements ActionListener {
+/**
+ * JEditorPane uneditable with URL input
+ */
+
+public class TextComponent_AllTypes_EditorPane_TextPane extends JPanel implements ActionListener {
 
     //Fields
     private static final String text = "text";
@@ -24,7 +28,7 @@ public class TextComponent_AllTypes extends JPanel implements ActionListener {
     private int counter = 0;
 
     //constructor
-    public TextComponent_AllTypes() {
+    public TextComponent_AllTypes_EditorPane_TextPane() {
         setLayout(new BorderLayout());
         // the outer layer JPanel has two Panels
         JPanel leftPanel = new JPanel(new BorderLayout()); // up-down layout defined by Page_start and Center
@@ -257,7 +261,7 @@ public class TextComponent_AllTypes extends JPanel implements ActionListener {
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        TextComponent_AllTypes pane = new TextComponent_AllTypes();
+        TextComponent_AllTypes_EditorPane_TextPane pane = new TextComponent_AllTypes_EditorPane_TextPane();
         frame.getContentPane().add(pane);
 
         frame.pack();
