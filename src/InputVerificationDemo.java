@@ -41,7 +41,7 @@ public class InputVerificationDemo extends JPanel {
     //Formats to format and parse numbers
     private NumberFormat moneyFormat;
     private NumberFormat percentFormat;
-    private DecimalFormat decimalFormat;
+    private NumberFormat decimalFormat;
     private DecimalFormat paymentFormat;
     private MyVerifier verifier = new MyVerifier();
 
@@ -115,10 +115,12 @@ public class InputVerificationDemo extends JPanel {
         int MIN_PERIOD = 1;
         int MAX_PERIOD = 40;
 
-        public boolean shouldYieldFocus(JComponent input) {
+        public boolean shouldYieldFocus(JComponent input, JComponent target) {
             boolean inputOK = verify(input);
             makeItPretty(input);
+            //verify(input);
             updatePayment();
+            verifyTarget(target);
 
             if (inputOK) {
                 return true;
@@ -126,6 +128,11 @@ public class InputVerificationDemo extends JPanel {
                 Toolkit.getDefaultToolkit().beep();
                 return false;
             }
+        }
+
+        @Override
+        public boolean verifyTarget(JComponent target) {
+            return true;
         }
 
         protected void updatePayment() {
@@ -292,7 +299,7 @@ public class InputVerificationDemo extends JPanel {
 
         public void actionPerformed(ActionEvent e) {
             JTextField source = (JTextField)e.getSource();
-            shouldYieldFocus(source); //ignore return value
+            shouldYieldFocus(source,null); //ignore return value
             source.selectAll();
         }
     }
@@ -366,16 +373,17 @@ public class InputVerificationDemo extends JPanel {
     //Create and set up number formats. These objects are used
     //for both parsing input and formatting output.
     private void setUpFormats() {
-        moneyFormat = (NumberFormat)NumberFormat.getNumberInstance();
+        moneyFormat = NumberFormat.getNumberInstance();
 
         percentFormat = NumberFormat.getNumberInstance();
         percentFormat.setMinimumFractionDigits(3);
 
-        decimalFormat = (DecimalFormat)NumberFormat.getNumberInstance();
+        decimalFormat = NumberFormat.getNumberInstance();
         decimalFormat.setParseIntegerOnly(true);
 
-        paymentFormat = (DecimalFormat)NumberFormat.getNumberInstance();
+        paymentFormat = (DecimalFormat) DecimalFormat.getNumberInstance();
         paymentFormat.setMaximumFractionDigits(2);
+        //  these two methos are only from decimalFormat
         paymentFormat.setNegativePrefix("(");
         paymentFormat.setNegativeSuffix(")");
     }
