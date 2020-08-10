@@ -40,7 +40,7 @@ public class InputVerificationDemo extends JPanel {
 
     //Formats to format and parse numbers
     private NumberFormat moneyFormat;
-    private NumberFormat percentFormat;
+    private NumberFormat percentFormat;      
     private NumberFormat decimalFormat;
     private DecimalFormat paymentFormat;
     private MyVerifier verifier = new MyVerifier();
@@ -64,6 +64,7 @@ public class InputVerificationDemo extends JPanel {
 
         rateField = new JTextField(percentFormat.format(DEFAULT_RATE), 10);
         rateField.setInputVerifier(verifier);
+       // rateField.setText(percentFormat.format(DEFAULT_RATE));
 
         numPeriodsField = new JTextField(decimalFormat.format(DEFAULT_PERIOD), 10);
         numPeriodsField.setInputVerifier(verifier);
@@ -72,7 +73,7 @@ public class InputVerificationDemo extends JPanel {
         paymentField.setInputVerifier(verifier);
         paymentField.setEditable(false);
         //Remove this component from the focus cycle.
-        paymentField.setFocusable(false);
+        paymentField.setFocusable(true);
         paymentField.setForeground(Color.red);
 
         //Register an action listener to handle Return.
@@ -118,7 +119,8 @@ public class InputVerificationDemo extends JPanel {
         public boolean shouldYieldFocus(JComponent input, JComponent target) {
             boolean inputOK = verify(input);
             makeItPretty(input);
-            //verify(input);
+//            verify(input);
+            // todo: why update here?
             updatePayment();
             verifyTarget(target);
 
@@ -378,8 +380,8 @@ public class InputVerificationDemo extends JPanel {
         percentFormat = NumberFormat.getNumberInstance();
         percentFormat.setMinimumFractionDigits(3);
 
-        decimalFormat = NumberFormat.getNumberInstance();
-        decimalFormat.setParseIntegerOnly(true);
+        decimalFormat = NumberFormat.getIntegerInstance();
+       // decimalFormat.setParseIntegerOnly(true);
 
         paymentFormat = (DecimalFormat) DecimalFormat.getNumberInstance();
         paymentFormat.setMaximumFractionDigits(2);

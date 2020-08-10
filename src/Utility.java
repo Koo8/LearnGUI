@@ -21,4 +21,18 @@ public class Utility {
         }
         return ext;
     }
+
+
+   // Mortgage loan calculator
+    public static double getPaymentAmount(double loan, double rate, int year) {
+        // M = P [ i(1 + i)^n ] / [ (1 + i)^n – 1] ---> i = rate /100/12;
+        System.out.println("start calculating");
+        double i = rate/100/12.0;
+        double a =  Math.pow((1 + i), year * 12);//(1 + i)^n
+        double upperPart = loan * (i* a) ;
+        double lowerPart = a -1;
+        double payment = -(upperPart/lowerPart); // output payment as a negative number
+
+        return payment;
+    }
 }

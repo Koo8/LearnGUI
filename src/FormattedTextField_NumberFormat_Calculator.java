@@ -62,7 +62,7 @@ implements PropertyChangeListener {
 
         NumberFormat format4 = NumberFormat.getCurrencyInstance();
         f4 = new JFormattedTextField(format4);
-        f4.setValue(getPaymentAmount(amount, rate, amortization));
+        f4.setValue(Utility.getPaymentAmount(amount, rate, amortization));
         f4.setColumns(10);
         f4.setEditable(false);
         f4.setForeground(Color.red);
@@ -82,18 +82,6 @@ implements PropertyChangeListener {
     }
 
 
-    private double getPaymentAmount(double loan, double rate, int year) {
-       // M = P [ i(1 + i)^n ] / [ (1 + i)^n – 1] ---> i = rate /100/12;
-        System.out.println("start calculating");
-        double i = rate/100/12.0;
-        double a =  Math.pow((1 + i), year * 12);//(1 + i)^n
-        double upperPart = loan * (i* a) ;
-        double lowerPart = a -1;
-        double payment = upperPart/lowerPart;
-
-        return payment;
-    }
-
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         System.out.println("listen....");
@@ -107,7 +95,7 @@ implements PropertyChangeListener {
         } else if (source == f3) {
             amortization = ((Number) f3.getValue()).intValue();
         }
-        f4.setValue(getPaymentAmount(amount, rate, amortization));
+        f4.setValue(Utility.getPaymentAmount(amount, rate, amortization));
     }
 
     // CASGUI
