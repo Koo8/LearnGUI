@@ -7,6 +7,10 @@ import java.text.NumberFormat;
 /**
  * mortgage calculating formula:
  * M = P [ i(1 + i)^n ] / [ (1 + i)^n – 1]
+ *
+ * Check FormatterFactoryDemo.java to see
+ * 1 when focus/non-focus change the formatter to edit_format or display_format using DefaultFormatterFactory instance
+ * 2 NumberFormatter(format) overide valuetostring and stringtovalue method, oooo I don't understand this part.
  */
 
 public class FormattedTextField_NumberFormat_Calculator
