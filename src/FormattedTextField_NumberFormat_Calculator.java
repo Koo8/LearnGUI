@@ -11,7 +11,7 @@ import java.text.NumberFormat;
 
 public class FormattedTextField_NumberFormat_Calculator
 extends JPanel
-implements PropertyChangeListener {
+implements PropertyChangeListener {   //propertyChangeListener is for listen to FormattedTextField value change
     JFormattedTextField f1,f2,f3, f4;
 
     double amount = 100000, rate = 7.5;
@@ -95,6 +95,9 @@ implements PropertyChangeListener {
         } else if (source == f3) {
             amortization = ((Number) f3.getValue()).intValue();
         }
+        // note: you do not usually call the setText method on a formatted text field.
+        // If you do, the field's display changes accordingly but the value is not updated
+        // (unless the field's formatter updates it constantly).
         f4.setValue(Utility.getPaymentAmount(amount, rate, amortization));
     }
 
@@ -112,12 +115,5 @@ implements PropertyChangeListener {
     // Main
     public static void main(String[] args) {
         SwingUtilities.invokeLater(FormattedTextField_NumberFormat_Calculator::CASGUI);
-    }
-
-    private class MyInputVerifier extends InputVerifier{
-        @Override
-        public boolean verify(JComponent input) {
-            return false;
-        }
     }
 }
