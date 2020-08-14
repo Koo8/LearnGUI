@@ -7,6 +7,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
 /**
+ * This is from Oracle tutorial
  * TextInputDemo.java uses these additional files:
  *   SpringUtilities.java
  *   When a component's getMaximumSize and getPreferredSize
@@ -21,7 +22,6 @@ import java.awt.event.FocusListener;
  *   SEE how this program can set the (in boxlayout) the JPanel to a fixed Max size
  */
 
-// todo: study SpringLayout first, then work on this one. oooo
 public class TextInputDemo extends JPanel
         implements ActionListener,
         FocusListener {
@@ -89,6 +89,7 @@ public class TextInputDemo extends JPanel
             addressSet = false;
             streetField.setText("");
             cityField.setText("");
+            stateSpinner.setValue(getStateStrings()[0]);
 
             //We can't just setText on the formatted text
             //field, since its value will remain set.
@@ -189,6 +190,7 @@ public class TextInputDemo extends JPanel
      * we can select the focused field.
      */
     public void focusGained(FocusEvent e) {
+        System.out.println("in focusGained  " + e.getSource());
         Component c = e.getComponent();
         if (c instanceof JFormattedTextField) {
             selectItLater(c);
