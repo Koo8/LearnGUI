@@ -26,7 +26,8 @@ public class Utility {
    // Mortgage loan calculator
     public static double getPaymentAmount(double loan, double rate, int year) {
         // M = P [ i(1 + i)^n ] / [ (1 + i)^n – 1] ---> i = rate /100/12;
-        System.out.println("start calculating");
+        System.out.println("start calculating in getPaymentAmount...");
+        System.out.println("rate is " + rate); // rate is 7.5 not 0.075
         double i = rate/100/12.0;
         double a =  Math.pow((1 + i), year * 12);//(1 + i)^n
         double upperPart = loan * (i* a) ;

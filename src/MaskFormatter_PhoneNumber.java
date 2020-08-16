@@ -3,6 +3,11 @@ import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.text.ParseException;
 
+/**
+ * This program use JFormattedTextField(JFormattedTextField.AbstractFormatter) constructor
+ * to create a FTF instance
+ */
+
 public class MaskFormatter_PhoneNumber {
     public static void main(String args[]) throws ParseException {
         JFrame frame = new JFrame();

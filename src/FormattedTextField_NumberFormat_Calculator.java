@@ -8,7 +8,11 @@ import java.text.NumberFormat;
  * mortgage calculating formula:
  * M = P [ i(1 + i)^n ] / [ (1 + i)^n – 1]
  *
- * Check FormatterFactoryDemo.java to see
+ * This program use JFormattedTextFiled(format) constructor, a default formatter is automatically created for the field
+ *
+ * Another related program is MaskFormatter_PhoneNumber.java using JFormattedTestField.AbstractFormatter parameter for constructor
+ *
+ * Check and compare with FormatterFactory_NumberFormatter_Calculator.java to see
  * 1 when focus/non-focus change the formatter to edit_format or display_format using DefaultFormatterFactory instance
  * 2 NumberFormatter(format) overide valuetostring and stringtovalue method, oooo I don't understand this part.
  */
@@ -16,7 +20,9 @@ import java.text.NumberFormat;
 public class FormattedTextField_NumberFormat_Calculator
 extends JPanel
 implements PropertyChangeListener {   //propertyChangeListener is for listen to FormattedTextField value change
-    JFormattedTextField f1,f2,f3, f4;
+    JFormattedTextField f1,f2,f3;
+    //JLabel f4;  // paymentField can use Jlabel or jTextField,  we could still use the paymentFormat method to parse the payment amount into the text to be displayed.
+    JFormattedTextField f4;
 
     double amount = 100000, rate = 7.5;
     int amortization = 30;
@@ -29,9 +35,7 @@ implements PropertyChangeListener {   //propertyChangeListener is for listen to 
         // for formattedTextField calculator
         // two JPanels left and right to hold JLabels and JFormatted Text Fields
         JPanel leftLabels = new JPanel(new GridLayout(0,1));
-        leftLabels.setAlignmentX(RIGHT_ALIGNMENT);
         JPanel rightFields = new JPanel(new GridLayout(0, 1));
-        rightFields.setAlignmentX(LEFT_ALIGNMENT);
         // add four labels into the left JPanel
         JLabel label1 = new JLabel("Loan Amount");
         JLabel label2 = new JLabel("APR rate (%)");
@@ -45,6 +49,8 @@ implements PropertyChangeListener {   //propertyChangeListener is for listen to 
         // add four formattedTextFields to the right JPanel
 
         NumberFormat format1 = NumberFormat.getNumberInstance();
+        // constructor with format as parameter
+        // A formatter is automatically created that uses the specified format.
          f1 = new JFormattedTextField(format1);
         f1.setValue(amount);
         rightFields.add(f1);
@@ -58,7 +64,11 @@ implements PropertyChangeListener {   //propertyChangeListener is for listen to 
         rightFields.add(f2);
         label2.setLabelFor(f2);
 
-        f3 = new JFormattedTextField(); // although this has no specific formatter, it is treated as int, even put in decimal will trim the decimal part.
+        // implicitly using default formatter -- for integer object//
+        // it sets the value to an Integer and enables the field to use the default formatter for Integer objects.
+        // If the value is a Date, the formatter is a DateFormatter. If the value is a Number, the formatter is
+        // a NumberFormatter. Other types result in an instance of DefaultFormatter.
+        f3 = new JFormattedTextField();
         f3.setValue(amortization);
         f3.setColumns(10);
         rightFields.add(f3);
@@ -66,12 +76,14 @@ implements PropertyChangeListener {   //propertyChangeListener is for listen to 
 
         NumberFormat format4 = NumberFormat.getCurrencyInstance();
         f4 = new JFormattedTextField(format4);
+       // f4 = new JLabel(format4);
         f4.setValue(Utility.getPaymentAmount(amount, rate, amortization));
         f4.setColumns(10);
         f4.setEditable(false);
         f4.setForeground(Color.red);
         rightFields.add(f4);
         label4.setLabelFor(f4);
+
         // highlight: I don't understand why has to use "value" exact wording, need to find its origin
         f1.addPropertyChangeListener("value",this);    // oo add"value" or without the propertyname both works.
         f2.addPropertyChangeListener("value",this);    // however, with propertyName "value" not anything else,won't trigger listener when just starting,
