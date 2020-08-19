@@ -2,7 +2,15 @@ import javax.swing.*;
 import java.io.File;
 import java.net.URL;
 
+/**
+ *  1.createImageIcon
+ *  2.getFileExtension
+ *  3.getPaymentAmount(for calculator)
+ *  4.getTextFieldForSpinnerEditor( for a JSpinner.DefaultEditor)
+ */
+
 public class Utility {
+    /* create ImageIcon */
     public static ImageIcon createImageIcon(Object obj, String path) {
         URL imgURL = obj.getClass().getResource(path);
         if (imgURL != null) {
@@ -12,6 +20,7 @@ public class Utility {
             return null;
         }
     }
+    /* File Extention */
     public static String getFileExtension(File f) {
         String ext = null;
         String name = f.getName();
@@ -35,5 +44,25 @@ public class Utility {
         double payment = -(upperPart/lowerPart); // output payment as a negative number
 
         return payment;
+    }
+    /**
+     * Return the formatted text field used by the JSpinner's editor, or
+     * null if the editor doesn't descend from JSpinner.DefaultEditor.
+     */
+    public static JFormattedTextField getTextFieldForSpinnerEditor(JSpinner spinner) {
+        JComponent editor = spinner.getEditor();
+        if (editor instanceof JSpinner.DefaultEditor) {
+            return ((JSpinner.DefaultEditor)editor).getTextField();
+        } else {
+            System.err.println("Unexpected editor type: "
+                    + spinner.getEditor().getClass()
+                    + " isn't a descendant of DefaultEditor");
+            return null;
+        }
+    }
+
+    public static void turnOffTheBoldFont() {
+        // turn off bold fonts
+        UIManager.put("swing.boldMetal", Boolean.FALSE);
     }
 }

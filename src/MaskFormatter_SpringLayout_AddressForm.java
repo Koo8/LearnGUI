@@ -8,9 +8,18 @@ import java.awt.event.FocusListener;
 import java.text.ParseException;
 
 /**
- * refer to TextInputDemo.java from oracle
- * it has a getTextField(JSpinner spinner) for the JSpinner editor defination.
- * highlight: I don't understand this part about JSpinner
+ * refer to TextInputDemo.java from oracle  - the difference is I didn't use the getTextFieldForSpinnerEditor() for the JSpinner.
+ * the helper method is in Utility.java
+ *
+ * When a component's getMaximumSize and getPreferredSize
+ *  methods return the same value, SpringLayout interprets
+ * this as meaning that the component should not be stretched.
+ * JLabel and JButton are examples of components implemented this way.
+ * The getMaximumSize method of some components,
+ * such as JTextField, returns the value Integer.MAX_VALUE for the width
+ * and height of its maximum size, indicating that the component can grow to any size.
+ * Therefore, when the frame size grow, it will get extra space allocate to it
+ * SEE how this program can set the (in boxlayout) the JPanel to a fixed Max size
  *
  */
 public class MaskFormatter_SpringLayout_AddressForm extends JPanel implements ActionListener, FocusListener {
@@ -74,14 +83,14 @@ public class MaskFormatter_SpringLayout_AddressForm extends JPanel implements Ac
             "West Virginia (WV)",
             "Wisconsin (WI)",
             "Wyoming (WY)"
-    };;
+    };
 
     // constructor - set the layout of components in the panel
     MaskFormatter_SpringLayout_AddressForm() {
         // first layer is left-right layout
         // second layer is top-bottom layout
 
-        // use boxLayout can control the maximumSize of components
+        // use BoxLayout can control the maximumSize of components  - other layoutManager can't do this
         setLayout(new BoxLayout(this,BoxLayout.LINE_AXIS));
         //create a leftPanel with maxSize constraints
         JPanel leftPane = new JPanel() {
@@ -114,6 +123,7 @@ public class MaskFormatter_SpringLayout_AddressForm extends JPanel implements Ac
         // I should predefine all 4 textfield first
         streetField = new JTextField(20);
         cityField = new JTextField(20);
+        // create a JSpinner with ListModel(list or array), it automatically create a ListEditor(usually use JFormattedTextField)
         stateSpinner = new JSpinner(new SpinnerListModel(stateList));
         zipField = new JFormattedTextField(zipCodeFormatter("#####"));
         JComponent[] coms = {streetField, cityField,stateSpinner, zipField};
@@ -126,9 +136,6 @@ public class MaskFormatter_SpringLayout_AddressForm extends JPanel implements Ac
         }
         // define Springlayout layout using SpringUtilities.java
         SpringUtilities.makeCompactGrid(mainForm,labelArray.length,2,5,5,5,5);
-
-
-
         return mainForm;
 
     }
@@ -156,7 +163,7 @@ public class MaskFormatter_SpringLayout_AddressForm extends JPanel implements Ac
         clearBtn.addActionListener(this);
         // to distinguish which btn is called
         // highlight: since setAddressBtn doesn't
-        //  have setactionCommand, its getActionCommand is its text "Set Address"
+        // highlight: have setactionCommand, its getActionCommand is its text "Set Address"
         clearBtn.setActionCommand("clear");
         setAddressBtn.setActionCommand("address");
         return buttonPane;
