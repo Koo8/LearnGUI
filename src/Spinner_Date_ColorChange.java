@@ -19,23 +19,24 @@ import java.util.Date;
  *
  */
 public class Spinner_Date_ColorChange extends JPanel implements ChangeListener {
-    // Fields
-    // label array
-    String[] labels = {"Months ", "Years ", "Color Change","Another Date "};
-    JSpinner spinner, spinnerColor;
+    private JSpinner spinner, spinnerColor;
     // get  current calender instance, will be used for 2nd and 3rd spinners
-    Calendar calendar = Calendar.getInstance();
-    boolean cycleModel = false;
+    private Calendar calendar = Calendar.getInstance();
+    // for link year model with month model
+    private boolean cycleModel = false;
     CyclingSpinnerListModel myModel;
 
 
     // constructor
-    Spinner_Date_ColorChange() {
+    private Spinner_Date_ColorChange() {
         super(new SpringLayout());
 
         // make 3 pairs of JLabel and JSpinner pairs and add them to the Jpanel
         ///// FIRST *****
-        spinner = createLabeledSpinner(this,labels[0], createMonthModel(true));
+        // Fields
+        // label array
+        String[] labels = {"Months ", "Years ", "Color Change", "Another Date "};
+        spinner = createLabeledSpinner(this, labels[0], createMonthModel(true));
 
         if (spinner.getModel() instanceof CyclingSpinnerListModel) {
             cycleModel = true;
@@ -50,22 +51,25 @@ public class Spinner_Date_ColorChange extends JPanel implements ChangeListener {
         field.setHorizontalAlignment(SwingConstants.TRAILING);
 
         ///// SECOND *****
-        spinner = createLabeledSpinner(this,labels[1], createYearModel());
+        spinner = createLabeledSpinner(this, labels[1], createYearModel());
         // make the year display formatted without a thousand seperator
         JSpinner.NumberEditor editor = new JSpinner.NumberEditor(spinner,"####");
         spinner.setEditor(editor);
 
         ///// Third *****
-        spinner =createLabeledSpinner(this,labels[2],new GrayNumberModel(40));
+        spinner =createLabeledSpinner(this, labels[2],new GrayNumberModel(40));
         spinner.setEditor(new GrayEditor(spinner));
 
         ///// Fourth *****
-        spinner = createLabeledSpinner(this,labels[3], createDateModel());
+        spinner = createLabeledSpinner(this, labels[3], createDateModel());
         JSpinner.DateEditor editor1 = new JSpinner.DateEditor(spinner,"MM/yyyy"); // note: yyyy is right, can't use YYYY (week year).
         spinner.setEditor(editor1);
         field = Utility.getTextFieldForSpinnerEditor(spinner);
-        field.setHorizontalAlignment(SwingConstants.TRAILING);
-        field.setBorder(BorderFactory.createEmptyBorder(10,1,1,1));
+        if(field != null) {
+            field.setHorizontalAlignment(SwingConstants.TRAILING);
+            field.setBorder(BorderFactory.createEmptyBorder(10,1,1,1));
+        }
+
         spinner.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
         spinner.addChangeListener(this); // note: spinner can't add propertyChangeListener.
 

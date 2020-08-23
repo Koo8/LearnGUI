@@ -17,7 +17,7 @@ import java.text.ParseException;
  * JLabel and JButton are examples of components implemented this way.
  * The getMaximumSize method of some components,
  * such as JTextField, returns the value Integer.MAX_VALUE for the width
- * and height of its maximum size, indicating that the component can grow to any size.
+ * and height of its MAX size, indicating that the component can grow to any size.
  * Therefore, when the frame size grow, it will get extra space allocate to it
  * SEE how this program can set the (in boxlayout) the JPanel to a fixed Max size
  *

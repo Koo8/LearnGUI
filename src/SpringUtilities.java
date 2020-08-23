@@ -11,7 +11,7 @@ import java.awt.*;
 public class SpringUtilities {
     /**
      * A debugging utility that prints to stdout the component's
-     * minimum, preferred, and maximum sizes.
+     * minimum, preferred, and MAX sizes.
      */
     public static void printSizes(Component c) {
         System.out.println("minimumSize = " + c.getMinimumSize());
@@ -22,7 +22,7 @@ public class SpringUtilities {
     /**
      * Aligns the first <code>rows</code> * <code>cols</code>
      * components of <code>parent</code> in
-     * a grid. Each component is as big as the maximum
+     * a grid. Each component is as big as the MAX
      * preferred width and height of the components.
      * The parent is made just big enough to fit them all.
      *
@@ -125,7 +125,7 @@ public class SpringUtilities {
     /**
      * Aligns the first <code>rows</code> * <code>cols</code>
      * components of <code>parent</code> in
-     * a grid. Each component in a column is as wide as the maximum
+     * a grid. Each component in a column is as wide as the MAX
      * preferred width of the components in that column;
      * height is similarly determined for each row.
      * The parent is made just big enough to fit them all.

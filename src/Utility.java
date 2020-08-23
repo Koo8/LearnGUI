@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.net.URL;
 
@@ -7,6 +8,8 @@ import java.net.URL;
  *  2.getFileExtension
  *  3.getPaymentAmount(for calculator)
  *  4.getTextFieldForSpinnerEditor( for a JSpinner.DefaultEditor)
+ *  5.getMaximumSize() - to keep the JComponent size to is preferred height.
+ *
  */
 
 public class Utility {
@@ -64,5 +67,13 @@ public class Utility {
     public static void turnOffTheBoldFont() {
         // turn off bold fonts
         UIManager.put("swing.boldMetal", Boolean.FALSE);
+    }
+
+    //Don't allow this panel to get taller than its preferred size.
+    //BoxLayout pays attention to MAX size, though most layout
+    //managers don't.
+    public static Dimension getMaximumSize(JComponent component) {
+        return new Dimension(Integer.MAX_VALUE,
+                component.getPreferredSize().height);
     }
 }

@@ -6,13 +6,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /* Various date formats */
-public class ComboBoxDemo2 extends JPanel
+public class ComboBoxDemo2_Format extends JPanel
         implements ActionListener {
     static JFrame frame;
     JLabel result;
     String currentPattern;
 
-    public ComboBoxDemo2() {
+    public ComboBoxDemo2_Format() {
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         String[] patternExamples = {
                 "dd MMMMM yyyy",
@@ -100,11 +100,11 @@ public class ComboBoxDemo2 extends JPanel
      */
     private static void createAndShowGUI() {
         //Create and set up the window.
-        JFrame frame = new JFrame("ComboBoxDemo2");
+        JFrame frame = new JFrame("ComboBoxDemo2_Format");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //Create and set up the content pane.
-        JComponent newContentPane = new ComboBoxDemo2();
+        JComponent newContentPane = new ComboBoxDemo2_Format();
         newContentPane.setOpaque(true); //content panes must be opaque
         frame.setContentPane(newContentPane);
 
