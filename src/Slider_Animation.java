@@ -83,6 +83,26 @@ public class Slider_Animation extends JPanel implements ActionListener, ChangeLi
         timer.setCoalesce(true); // cancel event if too many piled up
         // timer is initially invoked in GUI
     }
+
+    /** Add a listener for window events. */
+    /*TODO: not quite understand why windowlistener is added this way */
+    
+    void addWindowListener(Window w) {
+        w.addWindowListener(this);
+    }
+
+    //React to window events.
+    public void windowIconified(WindowEvent event) {
+        stopAnimation();
+    }
+    public void windowDeiconified(WindowEvent e) {
+        startAnimation();
+    }
+    public void windowOpened(WindowEvent e) {}
+    public void windowClosing(WindowEvent e) {}
+    public void windowClosed(WindowEvent e) {}
+    public void windowActivated(WindowEvent e) {}
+    public void windowDeactivated(WindowEvent e) {}
      // update image according to the frameIndex
     private void updatePicture(int index) {
         if(images[index] == null) {
@@ -167,38 +187,4 @@ public class Slider_Animation extends JPanel implements ActionListener, ChangeLi
         SwingUtilities.invokeLater(Slider_Animation::GUI);
     }
 
-    @Override
-    public void windowOpened(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowClosing(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowClosed(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowIconified(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowDeiconified(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowActivated(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowDeactivated(WindowEvent e) {
-
-    }
 }
