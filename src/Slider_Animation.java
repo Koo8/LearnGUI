@@ -34,7 +34,7 @@ public class Slider_Animation extends JPanel implements ActionListener, ChangeLi
         JSlider slider = new JSlider(JSlider.VERTICAL,FPS_MIN, FPS_MAX, FPS_INIT);
         slider.setMajorTickSpacing(10);
         slider.setMinorTickSpacing(1);
-        slider.setPaintTicks(true);
+        slider.setPaintTicks(true);  // to paint the ticks
         // make a labelTable for the slider labels
          /* The hashtable key must be of an Integer type and must
         have a value within the slider's range at which to place the label.
@@ -52,7 +52,8 @@ public class Slider_Animation extends JPanel implements ActionListener, ChangeLi
         table.put(FPS_MAX/10, new JLabel("Slow"));
         table.put(FPS_MAX,new JLabel("Fast"));
         slider.setLabelTable(table);
-        slider.setPaintLabels(true);
+        slider.setPaintLabels(true);  // for painting the number label beside the major tick marks
+                                      // you can also customize your label with a labelTable(HashTable) - see above
 
         slider.setBorder(BorderFactory.createEmptyBorder(0,0,0,10));
 
